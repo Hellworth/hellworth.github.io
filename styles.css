@@ -3,8 +3,10 @@
     --bright-orange: #ffe2c3;
     --light-orange: #FFC37E;
     --orange: #EF8D34;
+    --half-orange: #EF8D3440;
     --dark-orange: #997347;
     --content-max: 1920px;
+    --bg: #282828;
 }
 
 *, *::before, *::after {
@@ -15,7 +17,7 @@
 
 body {
     font-family: 'NerkoOne', sans-serif;
-    background-color: #282828;
+    background-color: var(--bg);
     color: #fff;
 }
 
@@ -365,6 +367,92 @@ body {
     padding: 60px clamp(20px, 5vw, 80px);
     max-width: var(--content-max);
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(36px, 5vw, 72px);
+    background-color: var(--bg);
+}
+
+.screenshot-showcase {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.screenshot-title {
+    margin: 0 auto;
+    font-size: clamp(1.7rem, 2.5vw, 2.8rem);
+}
+
+
+.screenshot-content {
+    width: min(640px, 100%);
+    display: grid;
+    grid-template-columns: minmax(100px, 160px) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0;
+}
+
+.screenshot-showcase--reverse .screenshot-content {
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 160px);
+}
+
+.screenshot-character-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+    margin-right: -30px;
+}
+
+.screenshot-showcase--reverse .screenshot-character-wrap {
+    order: 2;
+    margin-right: 0;
+    margin-left: -30px;
+}
+
+.screenshot-showcase--reverse .screenshot-card {
+    order: 1;
+}
+
+.screenshot-character {
+    width: auto;
+    height: 80%;
+    max-width: 300px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 0 #0004);
+}
+
+.screenshot-character--flip {
+    transform: scaleX(-1);
+}
+
+.screenshot-card {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 2px solid var(--orange);
+    border-radius: 0;
+    box-shadow: 10px 10px 0 #0004;
+    background-color: var(--light-orange);
+    position: relative;
+}
+
+.screenshot-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--half-orange) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.screenshot-card img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }
 
 /* ====== FAQ ====== */
