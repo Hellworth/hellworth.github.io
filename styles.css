@@ -145,19 +145,8 @@ body {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
 }
 
-/* ====== MAIN ====== */
-.main {
-    background-image: url('images/body_background.png');
-    background-position: top center;
-    background-repeat: repeat-x;
-    background-size: auto;
-    margin-top: -30px;
-    position: relative;
-    z-index: 2;
-}
-
 /* ====== SECTION TITLES ====== */
-.main h2 {
+h2 {
     font-size: clamp(1.8rem, 2.5vw, 3rem);
     color: #fff;
     text-align: center;
@@ -260,7 +249,13 @@ body {
 .section-news {
     padding: 60px clamp(20px, 5vw, 80px);
     max-width: var(--content-max);
-    margin: 0 auto;
+    margin: -30px auto 0;
+    background-image: url('images/body_background.png');
+    background-position: top center;
+    background-repeat: repeat-x;
+    background-size: auto;
+    position: relative;
+    z-index: 2;
 }
 
 /* Two-column layout */
@@ -460,6 +455,77 @@ body {
     padding: 60px clamp(20px, 5vw, 80px);
     max-width: var(--content-max);
     margin: 0 auto;
+}
+
+.faq-list {
+    max-width: 780px;
+    margin: 40px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.faq-item {
+    background-color: var(--light-orange);
+    border: 3px solid var(--bright-orange);
+    border-radius: 25px;
+    box-shadow: 10px 10px 0 #0004;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.faq-question {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: clamp(14px, 2vw, 22px) clamp(18px, 3vw, 36px);
+    font-family: 'NerkoOne', sans-serif;
+    font-size: clamp(1rem, 1.4vw, 1.4rem);
+    color: #000;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s;
+}
+
+.faq-question::-webkit-details-marker { display: none; }
+
+.faq-question::after {
+    content: '>';
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.25s;
+}
+
+.faq-item[open] > .faq-question::after {
+    transform: rotate(90deg);
+}
+
+.faq-question:hover {
+    background-color: var(--bright-orange);
+    color: var(--orange);
+}
+
+.faq-answer {
+    padding: 0 clamp(18px, 3vw, 36px) clamp(14px, 2vw, 22px);
+    font-family: 'NerkoOne', sans-serif;
+    font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+    color: #000;
+    line-height: 1.6;
+    border-top: 2px solid #0001;
+    padding-top: 14px;
+}
+
+.faq-signature {
+    max-width: 780px;
+    margin: 28px auto 0;
+    text-align: right;
+    font-family: 'NerkoOne', sans-serif;
+    font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+    color: #fff;
+    opacity: 0.6;
 }
 
 /* ====== FOOTER ====== */
