@@ -6,6 +6,7 @@
     <title>Dranima</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="images/favicon.png" type="image/png">
+    <script src="script.js" defer></script>
 </head>
 <body>
 
@@ -135,42 +136,22 @@
         </article>
     </section>
 
+    <!-- ====== STEAM BANNER ====== -->
+    <section class="steam-banner" id="steam">
+        <h2>It will be playable on</h2>
+        <img class="steam-banner-logo" src="images/steam.png" alt="Steam">
+        <div class="steam-banner-flags">
+            <img class="steam-flag" src="images/flags/en.png" alt="English" title="English">
+            <img class="steam-flag" src="images/flags/fr.png" alt="French" title="French">
+            <img class="steam-flag" src="images/flags/pt.png" alt="Portuguese" title="Portuguese">
+            <img class="steam-flag" src="images/flags/es.png" alt="Spanish" title="Spanish">
+        </div>
+    </section>
+
     <!-- ====== FAQ ====== -->
     <section class="section-faq" id="faq">
         <h2>FAQ</h2>
-        <div class="faq-list">
-
-            <details class="faq-item">
-                <summary class="faq-question">How long has Dranima been in development, and what is already done?</summary>
-                <p class="faq-answer">Dranima has been in active development for a little over five years now (development started around 2020–2021). Most of the core documentation and planning is already finalized, and the main focus at the moment is the battle system, which is one of the most important gameplay features.</p>
-            </details>
-
-            <details class="faq-item">
-                <summary class="faq-question">How many years do you think it will take to finish the game?</summary>
-                <p class="faq-answer">It's difficult to give a precise timeline. An Alpha or Beta version may appear in the coming years, but there is currently no fixed release date for the final version. Development is progressing step by step, and updates will be shared whenever there is any meaningful progress to show.</p>
-            </details>
-
-            <details class="faq-item">
-                <summary class="faq-question">Is it an indie solo game?</summary>
-                <p class="faq-answer">Both yes and no. I started the project alone and have been working on it ever since. Currently, the project is self-funded and developed with help from several collaborators, mainly concept artists. The current priority is securing funding — you can also read about those who contributed (check "Credits" at the top of the page to see who participated in the development of this project).</p>
-            </details>
-
-            <details class="faq-item">
-                <summary class="faq-question">How can people support the project right now?</summary>
-                <p class="faq-answer">The best way to support the project right now is by following its development and sharing it with others who might be interested. Since Dranima is still in development, visibility and community feedback help a lot. In the future, there will also be opportunities to support the project more directly when the game reaches a more advanced stage.</p>
-            </details>
-
-            <details class="faq-item">
-                <summary class="faq-question">Will there be multiplayer?</summary>
-                <p class="faq-answer">Probably not. Dranima is primarily designed as a story-driven JRPG focused on a single-player experience. While we have considered a few ideas for multiplayer features or community-oriented things, they are unlikely to be implemented even in future updates.</p>
-            </details>
-
-            <details class="faq-item">
-                <summary class="faq-question">How often will there be updates?</summary>
-                <p class="faq-answer">There will be regular updates. Most of them will focus on bug fixes, balancing improvements, minor quality-of-life changes, and small pieces of content. Larger updates may also happen every few months.</p>
-            </details>
-
-        </div>
+        <div class="faq-list" id="faq-list"></div>
         <p class="faq-signature">— Alex Bourbon, creator of Dranima</p>
     </section>
 
@@ -179,120 +160,5 @@
         <p>&copy; 2026 Dranima. All rights reserved.</p>
     </footer>
 
-    <script>
-        (function () {
-            const THRESHOLD_MS = 200; // only show loader if loading takes longer than this
-            const start = Date.now();
-            let loaded = false;
-
-            function dismiss() {
-                const loader = document.getElementById('loader');
-                if (!loader) return;
-                loader.classList.add('loader-exit');
-                setTimeout(() => loader.remove(), 1800);
-            }
-
-            // If everything loads fast, skip the loader entirely
-            window.addEventListener('load', () => {
-                loaded = true;
-                const elapsed = Date.now() - start;
-                if (elapsed < THRESHOLD_MS) {
-                    // Fast load — remove loader instantly without animation
-                    const loader = document.getElementById('loader');
-                    if (loader) loader.remove();
-                } else {
-                    // Slow load — dismiss with exit animation
-                    dismiss();
-                }
-            });
-
-            // Show loader only after threshold (it starts hidden via CSS)
-            setTimeout(() => {
-                if (!loaded) {
-                    const loader = document.getElementById('loader');
-                    if (loader) loader.classList.add('loader-visible');
-                }
-            }, THRESHOLD_MS);
-        })();
-
-        /* ====== NEWS RENDERING ====== */
-        const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        function fmtDate(iso) {
-            const d = new Date(iso + 'T00:00:00');
-            return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
-        }
-
-        function createCard(item, small) {
-            const card = document.createElement('div');
-            card.className = 'news-card' + (small ? ' news-card--small' : '');
-            const icon = item.type === 'update' ? 'images/UPD.png' : 'images/NEWS.png';
-            card.innerHTML = `
-                <div class="news-card-image"><img src="${item.image}" alt="${item.title}"></div>
-                <div class="news-card-text">
-                    <h3>${item.title}</h3>
-                    <p class="news-card-desc">${item.description}</p>
-                    <span class="news-card-date">${fmtDate(item.date)}</span>
-                </div>
-                <div class="news-card-circle"><img src="${icon}" alt=""></div>
-            `;
-            card.style.cursor = 'pointer';
-            card.addEventListener('click', () => {
-                window.location.href = 'news.html?title=' + encodeURIComponent(item.title);
-            });
-            return card;
-        }
-
-        fetch('news.json')
-            .then(r => r.json())
-            .then(news => {
-                const MAX_LIST = 5;
-                // Sort by date descending
-                news.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                // === Major Announcements (important: true) ===
-                const majorContainer = document.getElementById('major-news-container');
-                news.filter(n => n.important).forEach(n => {
-                    majorContainer.appendChild(createCard(n, false));
-                });
-
-                // === Updates ===
-                const updates = news.filter(n => n.type === 'update');
-                const updateCardContainer = document.getElementById('update-card-container');
-                const updateList = document.getElementById('update-list');
-                const updateShowMore = document.getElementById('update-show-more');
-
-                if (updates.length > 0) {
-                    updateCardContainer.appendChild(createCard(updates[0], true));
-                }
-                const otherUpdates = updates.slice(1);
-                otherUpdates.slice(0, MAX_LIST).forEach(n => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="#">${n.title}<span class="news-list-date">${fmtDate(n.date)}</span></a>`;
-                    updateList.appendChild(li);
-                });
-                if (otherUpdates.length > MAX_LIST) {
-                    updateShowMore.style.display = 'block';
-                }
-
-                // === Announcements ===
-                const announcements = news.filter(n => n.type === 'announcement');
-                const announcementCardContainer = document.getElementById('announcement-card-container');
-                const announcementList = document.getElementById('announcement-list');
-                const announcementShowMore = document.getElementById('announcement-show-more');
-
-                if (announcements.length > 0) {
-                    announcementCardContainer.appendChild(createCard(announcements[0], true));
-                }
-                const otherAnnouncements = announcements.slice(1);
-                otherAnnouncements.slice(0, MAX_LIST).forEach(n => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="#">${n.title}<span class="news-list-date">${fmtDate(n.date)}</span></a>`;
-                    announcementList.appendChild(li);
-                });
-                if (otherAnnouncements.length > MAX_LIST) {
-                    announcementShowMore.style.display = 'block';
-                }
-            });
-    </script>
 </body>
 </html>
