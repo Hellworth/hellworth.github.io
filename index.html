@@ -9,6 +9,24 @@
 </head>
 <body>
 
+    <!-- ====== LOADER ====== -->
+    <div id="loader">
+        <div class="loader-bg"><img src="images/body_background.png" alt=""></div>
+        <div class="loader-content">
+            <div class="loader-spinner">
+                <div class="loader-dot" style="--i:0"></div>
+                <div class="loader-dot" style="--i:1"></div>
+                <div class="loader-dot" style="--i:2"></div>
+                <div class="loader-dot" style="--i:3"></div>
+                <div class="loader-dot" style="--i:4"></div>
+                <div class="loader-dot" style="--i:5"></div>
+                <div class="loader-dot" style="--i:6"></div>
+                <div class="loader-dot" style="--i:7"></div>
+            </div>
+            <span class="loader-text">Loading...</span>
+        </div>
+    </div>
+
     <!-- ====== NAVBAR ====== -->
     <nav class="navbar" id="main">
         <div class="navbar-logo">
@@ -33,12 +51,40 @@
             <span class="hero-label">Release Date:</span>
             <span class="hero-value">TBA</span>
         </div>
-        <img class="hero-icon" src="images/head_background_icon.png" alt="Dranima Hero Image" class="hero-icon">
+        <!--<img class="hero-icon" src="images/character.png" alt="">-->
     </section>
+
+    <!-- ====== MAIN ====== -->
+    <div class="main">
 
     <!-- ====== NEWS ====== -->
     <section class="section-news" id="news">
-        <h2>News</h2>
+        <h2>Major Announcements</h2>
+        <div id="major-news-container"></div>
+
+        <!-- Two columns: Updates & Announcements -->
+        <div class="news-columns">
+            <!-- Left: Updates -->
+            <div class="news-column">
+                <h2>Updates</h2>
+                <div id="update-card-container"></div>
+                <div class="news-list-card">
+                    <h3 class="news-list-title">Other Updates</h3>
+                    <ul class="news-list" id="update-list"></ul>
+                    <a href="news.html" class="news-show-more" id="update-show-more" style="display:none;">Show More</a>
+                </div>
+            </div>
+            <!-- Right: Announcements -->
+            <div class="news-column">
+                <h2>Announcements</h2>
+                <div id="announcement-card-container"></div>
+                <div class="news-list-card">
+                    <h3 class="news-list-title">Other Announcements</h3>
+                    <ul class="news-list" id="announcement-list"></ul>
+                    <a href="news.html" class="news-show-more" id="announcement-show-more" style="display:none;">Show More</a>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- ====== SCREENSHOTS ====== -->
@@ -51,10 +97,127 @@
         <h2>FAQ</h2>
     </section>
 
+    </div><!-- /.main -->
+
     <!-- ====== FOOTER ====== -->
     <footer class="footer" id="footer">
         <p>&copy; 2026 Dranima. All rights reserved.</p>
     </footer>
 
+    <script>
+        (function () {
+            const THRESHOLD_MS = 200; // only show loader if loading takes longer than this
+            const start = Date.now();
+            let loaded = false;
+
+            function dismiss() {
+                const loader = document.getElementById('loader');
+                if (!loader) return;
+                loader.classList.add('loader-exit');
+                setTimeout(() => loader.remove(), 1800);
+            }
+
+            // If everything loads fast, skip the loader entirely
+            window.addEventListener('load', () => {
+                loaded = true;
+                const elapsed = Date.now() - start;
+                if (elapsed < THRESHOLD_MS) {
+                    // Fast load — remove loader instantly without animation
+                    const loader = document.getElementById('loader');
+                    if (loader) loader.remove();
+                } else {
+                    // Slow load — dismiss with exit animation
+                    dismiss();
+                }
+            });
+
+            // Show loader only after threshold (it starts hidden via CSS)
+            setTimeout(() => {
+                if (!loaded) {
+                    const loader = document.getElementById('loader');
+                    if (loader) loader.classList.add('loader-visible');
+                }
+            }, THRESHOLD_MS);
+        })();
+
+        /* ====== NEWS RENDERING ====== */
+        const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        function fmtDate(iso) {
+            const d = new Date(iso + 'T00:00:00');
+            return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+        }
+
+        function createCard(item, small) {
+            const card = document.createElement('div');
+            card.className = 'news-card' + (small ? ' news-card--small' : '');
+            const icon = item.type === 'update' ? 'images/UPD.png' : 'images/NEWS.png';
+            card.innerHTML = `
+                <div class="news-card-image"><img src="${item.image}" alt="${item.title}"></div>
+                <div class="news-card-text">
+                    <h3>${item.title}</h3>
+                    <p class="news-card-desc">${item.description}</p>
+                    <span class="news-card-date">${fmtDate(item.date)}</span>
+                </div>
+                <div class="news-card-circle"><img src="${icon}" alt=""></div>
+            `;
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                window.location.href = 'news.html?title=' + encodeURIComponent(item.title);
+            });
+            return card;
+        }
+
+        fetch('news.json')
+            .then(r => r.json())
+            .then(news => {
+                const MAX_LIST = 5;
+                // Sort by date descending
+                news.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // === Major Announcements (important: true) ===
+                const majorContainer = document.getElementById('major-news-container');
+                news.filter(n => n.important).forEach(n => {
+                    majorContainer.appendChild(createCard(n, false));
+                });
+
+                // === Updates ===
+                const updates = news.filter(n => n.type === 'update');
+                const updateCardContainer = document.getElementById('update-card-container');
+                const updateList = document.getElementById('update-list');
+                const updateShowMore = document.getElementById('update-show-more');
+
+                if (updates.length > 0) {
+                    updateCardContainer.appendChild(createCard(updates[0], true));
+                }
+                const otherUpdates = updates.slice(1);
+                otherUpdates.slice(0, MAX_LIST).forEach(n => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="#">${n.title}<span class="news-list-date">${fmtDate(n.date)}</span></a>`;
+                    updateList.appendChild(li);
+                });
+                if (otherUpdates.length > MAX_LIST) {
+                    updateShowMore.style.display = 'block';
+                }
+
+                // === Announcements ===
+                const announcements = news.filter(n => n.type === 'announcement');
+                const announcementCardContainer = document.getElementById('announcement-card-container');
+                const announcementList = document.getElementById('announcement-list');
+                const announcementShowMore = document.getElementById('announcement-show-more');
+
+                if (announcements.length > 0) {
+                    announcementCardContainer.appendChild(createCard(announcements[0], true));
+                }
+                const otherAnnouncements = announcements.slice(1);
+                otherAnnouncements.slice(0, MAX_LIST).forEach(n => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="#">${n.title}<span class="news-list-date">${fmtDate(n.date)}</span></a>`;
+                    announcementList.appendChild(li);
+                });
+                if (otherAnnouncements.length > MAX_LIST) {
+                    announcementShowMore.style.display = 'block';
+                }
+            });
+    </script>
 </body>
 </html>
