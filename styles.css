@@ -81,10 +81,16 @@ body {
     white-space: nowrap;
 }
 
-.navbar-links a:hover {
+.navbar-links a:hover, .navbar-links a.active {
     background-color: var(--orange);
     color: #fff;
     text-shadow: 0 0 5px #0006;
+}
+
+.navbar-links a.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* ====== HERO ====== */
@@ -173,10 +179,7 @@ h2 {
     box-shadow: var(--shadow);
     border-radius: 25px;
     border: 3px solid var(--bright-orange);
-    cursor: pointer;
-}
-
-.news-card:hover {
+    outline: 2px solid #000;
     cursor: pointer;
 }
 
@@ -290,6 +293,91 @@ h2 {
     box-shadow: inset 0 0 60px 30px rgba(255, 195, 126, 0.3);
 }
 
+/* ====== CREDITS ====== */
+.section-credits {
+    padding: 120px clamp(20px, 4vw, 80px) 120px;
+    max-width: var(--content-max);
+    margin: 0 auto;
+}
+
+.credits-category {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.credits-category:first-of-type {
+    margin-top: 100px;
+}
+
+.credits-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.credit-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.credit-role {
+    font-size: clamp(11px, 1.2vw, 14px);
+    color: #000;
+    background-color: var(--bright-orange);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 2px solid #000;
+    box-shadow: var(--shadow);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.credit-pfp {
+    width: 135px;
+    height: 135px;
+    border-radius: 15px;
+    object-fit: cover;
+    border: 3px solid var(--bright-orange);
+    box-shadow: var(--shadow), inset 0 2px 0 1px #fff4;
+    outline: 2px solid #000;
+    background-color: var(--light-orange);
+}
+
+.credit-name {
+    font-size: clamp(20px, 1.5vw, 26px);
+    color: #fff;
+    text-align: center;
+    -webkit-text-stroke: 3px #000;
+    paint-order: stroke fill;
+    text-shadow: var(--shadow);
+}
+
+.credits-guest-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: start;
+    gap: 10px 40px;
+    margin-top: 20px;
+    max-width: 700px;
+}
+
+.credits-guest-list span {
+    font-size: clamp(20px, 1.5vw, 26px);
+    -webkit-text-stroke: 3px #000;
+    paint-order: stroke fill;
+    color: #fff;
+    text-shadow: var(--shadow);
+    text-align: left;
+}
+
+/* ====== NEWS ====== */
+
 /* Two-column layout */
 .news-columns {
     display: flex;
@@ -323,6 +411,7 @@ h2 {
     border: 3px solid var(--bright-orange);
     border-radius: 25px;
     box-shadow: var(--shadow);
+    outline: 2px solid #000;
     overflow: hidden;
 }
 
@@ -488,6 +577,7 @@ h2 {
     overflow: hidden;
     background: linear-gradient(135deg, #050f1a 0%, #0e1f30 20%, #1b2838 40%, #223550 55%, #2a4a6b 65%, #1a3250 80%, #0d1b2a 100%);
     outline: 2px solid #66c0f4;
+    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -527,7 +617,6 @@ h2 {
 .steam-section-flag {
     width: 40px;
     height: 40px;
-    aspect-ratio: 1;
     margin-right: -4px;
     border-radius: 50%;
     filter: drop-shadow(var(--shadow));
@@ -559,6 +648,7 @@ h2 {
     border: 3px solid var(--bright-orange);
     border-radius: 25px;
     box-shadow: var(--shadow);
+    outline: 2px solid #000;
     overflow: hidden;
     transition: box-shadow 0.2s;
 }
@@ -570,7 +660,6 @@ h2 {
     align-items: center;
     gap: 16px;
     padding: clamp(14px, 2vw, 22px) clamp(18px, 4vw, 36px);
-    font-family: 'NerkoOne', sans-serif;
     font-size: clamp(16px, 2vw, 22px);
     color: #000;
     cursor: pointer;
@@ -599,7 +688,6 @@ h2 {
 
 .faq-answer {
     padding: 0 clamp(18px, 4vw, 36px) clamp(14px, 2vw, 22px);
-    font-family: 'NerkoOne', sans-serif;
     font-size: clamp(14px, 2vw, 18px);
     color: #000;
     line-height: 1.6;
@@ -611,7 +699,6 @@ h2 {
     max-width: 780px;
     margin: 28px auto 0;
     text-align: right;
-    font-family: 'NerkoOne', sans-serif;
     font-size: clamp(14px, 2vw, 18px);
     color: #fff;
     opacity: 0.6;
@@ -776,7 +863,6 @@ h2 {
 }
 
 .loader-text {
-    font-family: 'NerkoOne', sans-serif;
     font-size: 3rem;
     color: #000;
     text-shadow: var(--shadow);
