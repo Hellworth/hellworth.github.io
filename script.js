@@ -129,10 +129,11 @@ function renderNewsColumn(items, cardContainerId, listId, showMoreId) {
 }
 
 async function initNews() {
+    const majorContainer = document.getElementById('major-news-container');
+    if (!majorContainer) return;
     const news = await fetch('news.json').then(r => r.json());
     news.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    const majorContainer = document.getElementById('major-news-container');
     news.filter(n => n.important).forEach(n => majorContainer.appendChild(createNewsCard(n)));
 
     renderNewsColumn(
@@ -146,8 +147,9 @@ async function initNews() {
 }
 
 async function initFaq() {
-    const items = await fetch('faq.json').then(r => r.json());
     const list = document.getElementById('faq-list');
+    if (!list) return;
+    const items = await fetch('faq.json').then(r => r.json());
 
     items.forEach(({ question, answer }) => {
         const details = document.createElement('details');
@@ -160,9 +162,53 @@ async function initFaq() {
     });
 }
 
+async function initCredits() {
+    const container = document.getElementById('credits-container');
+    const guestContainer = document.getElementById('credits-guest-container');
+    if (!container && !guestContainer) return;
+
+    const { categories, guests } = await fetch('credits.json').then(r => r.json());
+
+    if (container) {
+        categories.forEach(({ title, members }) => {
+            const category = document.createElement('div');
+            category.className = 'credits-category';
+            category.innerHTML = `<h2>${title}</h2>`;
+
+            const row = document.createElement('div');
+            row.className = 'credits-row';
+
+            members.forEach(({ name, alias, image, roles }) => {
+                const card = document.createElement('div');
+                card.className = 'credit-card';
+                const displayName = alias ? `${name}<br>(${alias})` : name;
+                const rolesHTML = (roles || []).map(r => `<span class="credit-role">${r}</span>`).join('');
+                card.innerHTML = `
+                    <img class="credit-pfp" src="${image || 'images/template.png'}" alt="${name}">
+                    <span class="credit-name">${displayName}</span>
+                    ${rolesHTML}
+                `;
+                row.appendChild(card);
+            });
+
+            category.appendChild(row);
+            container.appendChild(category);
+        });
+    }
+
+    if (guestContainer) {
+        guests.forEach(name => {
+            const span = document.createElement('span');
+            span.textContent = `- ${name}`;
+            guestContainer.appendChild(span);
+        });
+    }
+}
+
 (async () => {
     await loadNavbar();
     initLoader();
     initNews();
     initFaq();
+    initCredits();
 })();
