@@ -300,6 +300,18 @@ h2 {
     margin: 0 auto;
 }
 
+.section-guest-artists {
+    background-color: var(--bg);
+    padding: 60px clamp(20px, 4vw, 80px);
+    max-width: var(--content-max);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.section-guest-artists h2 {
+    margin-bottom: 40px;
+}
+
 .credits-category {
     display: flex;
     flex-direction: column;
@@ -363,6 +375,7 @@ h2 {
     grid-template-columns: 1fr 1fr;
     justify-items: start;
     gap: 10px 40px;
+    margin: 0 auto;
     margin-top: 20px;
     max-width: 700px;
 }
