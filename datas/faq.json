@@ -22,5 +22,9 @@
     {
         "question": "How often will there be updates?",
         "answer": "There will be regular updates. Most of them will focus on bug fixes, balancing improvements, minor quality-of-life changes, and small pieces of content. Larger updates may also happen every few months."
+    },
+    {
+        "question": "Is generative AI used to create the game’s content?",
+        "answer": "No. All artwork, music, writing, and programming for Dranima are created by human contributors. The project relies on commissioned artists and collaborators to ensure that every part of the game is produced through direct creative work."
     }
 ]

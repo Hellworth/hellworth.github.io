@@ -40,6 +40,14 @@ async function loadLoader() {
     container.innerHTML = loader;
 }
 
+async function loadFooter() {
+    const container = document.getElementById('footer-container');
+    if (!container) return;
+    
+    const footer = await fetch('footer.html').then(r => r.text());
+    container.innerHTML = footer;
+}
+
 function initNavbar() {
     const page = location.pathname.split('/').pop() || 'index.html';
     document.querySelectorAll('.navbar-links a').forEach(link => {
@@ -207,6 +215,7 @@ async function initCredits() {
 
 (async () => {
     await loadNavbar();
+    await loadFooter();
     initLoader();
     initNews();
     initFaq();
