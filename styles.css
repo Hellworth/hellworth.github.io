@@ -65,7 +65,7 @@ body {
     border-radius: 100px 0 0 100px;
     outline: solid 3px #000;
     max-height: fit-content;
-    box-shadow: var(--shadow), inset 0 2px 0 1px #0006;
+    box-shadow: var(--shadow), inset 0 2px 0 1px #fff2;
     flex-wrap: wrap;
 }
 
@@ -114,6 +114,7 @@ body {
 .hero.hero-credits {
     justify-content: center;
     padding: 20px;
+    overflow: visible;
 }
 
 .hero-icon {
@@ -307,23 +308,40 @@ h2 {
 }
 
 .credits-title-box {
-    display: block;
-    width: fit-content;
-    margin: auto; /* Centered in flex container */
-    text-align: center;
-    background: linear-gradient(135deg, #bf3500 0%, #A52E00 50%, #8a2600 100%);
-    border: 3px solid #fff;
-    outline: 2px solid #000;
-    border-radius: 25px;
-    padding: 20px 80px;
-    box-shadow: var(--shadow);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    width: 280px;
+    height: 280px;
+    filter: drop-shadow(var(--shadow));
+}
+
+.credits-star {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: star-spin 30s linear infinite;
+}
+
+.credits-star polygon {
+    stroke: #fff;
+    stroke-width: 3;
+    paint-order: stroke fill;
+}
+
+@keyframes star-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
 }
 
 .credits-title-box h1 {
+    position: relative;
+    z-index: 1;
     color: #fff;
-    -webkit-text-stroke: 3px #000;
+    -webkit-text-stroke: 5px #000;
     paint-order: stroke fill;
-    text-shadow: var(--shadow);
     margin: 0;
     font-size: clamp(56px, 8vw, 104px);
 }
