@@ -1,7 +1,7 @@
 [
     {
         "question": "How long has Dranima been in development, and what is already done?",
-        "answer": "Dranima has been in active development for a little over five years now (development started around 2020–2021). Most of the core documentation and planning is already finalized, and the main focus at the moment is the battle system, which is one of the most important gameplay features."
+        "answer": "Dranima has been in active development for a little over five years now (development started around 2020-2021). Most of the core documentation and planning is already finalized, and the main focus at the moment is the battle system, which is one of the most important gameplay features."
     },
     {
         "question": "How many years do you think it will take to finish the game?",
@@ -9,7 +9,7 @@
     },
     {
         "question": "Is it an indie solo game?",
-        "answer": "Both yes and no. I started the project alone and have been working on it ever since. Currently, the project is self-funded and developed with help from several collaborators, mainly concept artists. The current priority is securing funding — you can also read about those who contributed (check "Credits" at the top of the page to see who participated in the development of this project)."
+    "answer": "Both yes and no. I started the project alone and have been working on it ever since. Currently, the project is self-funded and developed with help from several collaborators, mainly concept artists. The current priority is securing funding - you can also read about those who contributed (check \"Credits\" at the top of the page to see who participated in the development of this project)."
     },
     {
         "question": "How can people support the project right now?",
