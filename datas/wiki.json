@@ -23,6 +23,7 @@
             "id": "base",
             "name": "Base",
             "category": "how-to-play",
+            "icon": "images/character1.png",
             "preview": "Your Base is your home in Dranima. It's where you manage resources, train Dranimae, and prepare for your adventures across the land.",
             "sections": [
                 {

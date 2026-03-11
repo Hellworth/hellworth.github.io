@@ -101,6 +101,54 @@ function formatDate(iso) {
     return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+/* ====== NEWS POPUP ====== */
+function initNewsPopup() {
+    const overlay = document.createElement('div');
+    overlay.className = 'news-popup-overlay';
+    overlay.innerHTML = `
+        <div class="news-popup">
+            <button class="news-popup-close">&times;</button>
+            <div class="news-popup-image"><img src="" alt=""></div>
+            <div class="news-popup-body">
+                <div class="news-popup-header">
+                    <div class="news-popup-icon"><img src="" alt=""></div>
+                    <h2 class="news-popup-title"></h2>
+                </div>
+                <p class="news-popup-date"></p>
+                <p class="news-popup-desc"></p>
+                <div class="news-popup-content"></div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('.news-popup-close').addEventListener('click', closeNewsPopup);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeNewsPopup(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNewsPopup(); });
+}
+
+function openNewsPopup(item) {
+    const overlay = document.querySelector('.news-popup-overlay');
+    if (!overlay) return;
+    const icon = item.type === 'update' ? 'images/UPD.png' : 'images/NEWS.png';
+    overlay.querySelector('.news-popup-image img').src = item.image;
+    overlay.querySelector('.news-popup-image img').alt = item.title;
+    overlay.querySelector('.news-popup-icon img').src = icon;
+    overlay.querySelector('.news-popup-title').textContent = item.title;
+    overlay.querySelector('.news-popup-date').textContent = formatDate(item.date);
+    overlay.querySelector('.news-popup-desc').textContent = item.description;
+    overlay.querySelector('.news-popup-content').innerHTML = item.content || '';
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeNewsPopup() {
+    const overlay = document.querySelector('.news-popup-overlay');
+    if (!overlay) return;
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
 function createNewsCard(item, small = false) {
     const card = document.createElement('div');
     card.className = 'news-card' + (small ? ' news-card--small' : '');
@@ -114,15 +162,17 @@ function createNewsCard(item, small = false) {
         </div>
         <div class="news-card-circle"><img src="${icon}" alt=""></div>
     `;
-    card.addEventListener('click', () => {
-        window.location.href = 'news.html?title=' + encodeURIComponent(item.title);
-    });
+    card.addEventListener('click', () => openNewsPopup(item));
     return card;
 }
 
 function createNewsListItem(item) {
     const li = document.createElement('li');
     li.innerHTML = `<a href="#">${item.title}<span class="news-list-date">${formatDate(item.date)}</span></a>`;
+    li.querySelector('a').addEventListener('click', e => {
+        e.preventDefault();
+        openNewsPopup(item);
+    });
     return li;
 }
 
@@ -396,6 +446,7 @@ async function initWikiPage() {
     await loadFooter();
     await loadLoader();
     initLoader();
+    initNewsPopup();
     initNews();
     initFaq();
     initCredits();
