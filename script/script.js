@@ -9,7 +9,7 @@ async function loadNavbar() {
     const page = location.pathname.split('/').pop() || 'index.html';
     const isHomepage = page === 'index.html' || page === '';
     
-    const navbar = await fetch('navbar.html').then(r => r.text());
+    const navbar = await fetch('assets/navbar.html').then(r => r.text());
     container.innerHTML = navbar;
     
     // Adjust links based on current page
@@ -36,7 +36,7 @@ async function loadLoader() {
     const container = document.getElementById('loader-container');
     if (!container) return;
     
-    const loader = await fetch('loader.html').then(r => r.text());
+    const loader = await fetch('assets/loader.html').then(r => r.text());
     container.innerHTML = loader;
 }
 
@@ -44,7 +44,7 @@ async function loadFooter() {
     const container = document.getElementById('footer-container');
     if (!container) return;
     
-    const footer = await fetch('footer.html').then(r => r.text());
+    const footer = await fetch('assets/footer.html').then(r => r.text());
     container.innerHTML = footer;
 }
 
@@ -54,7 +54,8 @@ function initNavbar() {
         const href = link.getAttribute('href');
         const isActive = 
             (page === 'index.html' && href === '#main') ||
-            (page === 'credits.html' && href === 'credits.html');
+            (page === 'credits.html' && href === 'credits.html') ||
+            (page === 'project.html' && href === 'project.html');
         
         if (isActive) link.classList.add('active');
         else link.classList.remove('active');
@@ -175,7 +176,11 @@ async function initCredits() {
     const guestContainer = document.getElementById('credits-guest-container');
     if (!container && !guestContainer) return;
 
-    const { categories, guests } = await fetch('datas/credits.json').then(r => r.json());
+    const creditsData = await fetch('datas/credits.json').then(r => r.json());
+    const { categories, guests, team } = creditsData;
+
+    // Create a map to fetch member data easily securely using their ID
+    const teamMap = new Map((team || []).map(member => [member.id, member]));
 
     if (container) {
         categories.forEach(({ title, members }) => {
@@ -186,9 +191,23 @@ async function initCredits() {
             const row = document.createElement('div');
             row.className = 'credits-row';
 
-            members.forEach(({ name, alias, image, roles }) => {
-                const card = document.createElement('div');
+            members.forEach((creditItem) => {
+                const memberData = teamMap.get(creditItem.id) || {};
+                
+                const name = memberData.name || creditItem.id;
+                const alias = memberData.alias;
+                const image = memberData.image;
+                const link = memberData.link;
+                const roles = creditItem.roles; // Roles stay in the credits definition
+
+                const card = document.createElement(link ? 'a' : 'div');
                 card.className = 'credit-card';
+                if (link) {
+                    card.href = link;
+                    card.target = '_blank';
+                    card.style.textDecoration = 'none';
+                    card.style.color = 'inherit';
+                }
                 const displayName = alias ? `${name}<br>(${alias})` : name;
                 const rolesHTML = (roles || []).map(r => `<span class="credit-role">${r}</span>`).join('');
                 card.innerHTML = `
