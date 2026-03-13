@@ -37,10 +37,10 @@
             "image": "images/image_users/credit_carnek.png"
         },
         {
-            "id": "gallom",
-            "name": "Gallom",
-            "image": null,
-            "link": "https://twitter.com/Gallom"
+            "id": "galleom",
+            "name": "galleom",
+            "image": "images/image_users/credit_galleom.png",
+            "link": "https://twitter.com/galleom"
         },
         {
             "id": "charliemckenzie",
@@ -162,7 +162,7 @@
             "title": "VFX",
             "members": [
                 {
-                    "id": "gallom"
+                    "id": "galleom"
                 }
             ]
         },

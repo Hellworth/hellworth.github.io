@@ -2,54 +2,58 @@ const LOADER_THRESHOLD = 200;
 const NEWS_LIST_MAX = 5;
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
+// helpers -----------------------------------------------------------------
+function getCurrentPage() {
+    return location.pathname.split('/').pop() || 'index.html';
+}
+
+async function loadFragment(src, container) {
+    // container may be a node or an id string
+    if (typeof container === 'string') container = document.getElementById(container);
+    if (!container) return;
+    const html = await fetch(src).then(r => r.text());
+    container.innerHTML = html;
+}
+// -------------------------------------------------------------------------
+
 async function loadNavbar() {
     const container = document.getElementById('navbar-container');
     if (!container) return;
-    
-    const page = location.pathname.split('/').pop() || 'index.html';
-    const isHomepage = page === 'index.html' || page === '';
-    
-    const navbar = await fetch('assets/navbar.html').then(r => r.text());
-    container.innerHTML = navbar;
-    
+
+    await loadFragment('assets/navbar.html', container);
     // Adjust links based on current page
+    const page = getCurrentPage();
+    const isHomepage = page === 'index.html' || page === '';
+
     document.querySelectorAll('.navbar-links a').forEach(link => {
         const href = link.getAttribute('href');
-        const dataLink = link.getAttribute('data-link');
-        
         if (isHomepage) {
             // On index.html: convert "index.html#..." to "#..."
-            if (href.startsWith('index.html#')) {
+            if (href && href.startsWith('index.html#')) {
                 link.setAttribute('href', '#' + href.split('#')[1]);
-            } else if (href === 'credits.html') {
-                link.setAttribute('href', 'credits.html');
             }
-        } else {
-            // On credits.html: links already point to index.html#...
         }
     });
-    
+
     initNavbar();
 }
 
 async function loadLoader() {
     const container = document.getElementById('loader-container');
     if (!container) return;
-    
-    const loader = await fetch('assets/loader.html').then(r => r.text());
-    container.innerHTML = loader;
+
+    await loadFragment('assets/loader.html', container);
 }
 
 async function loadFooter() {
     const container = document.getElementById('footer-container');
     if (!container) return;
-    
-    const footer = await fetch('assets/footer.html').then(r => r.text());
-    container.innerHTML = footer;
+
+    await loadFragment('assets/footer.html', container);
 }
 
 function initNavbar() {
-    const page = location.pathname.split('/').pop() || 'index.html';
+    const page = getCurrentPage();
     document.querySelectorAll('.navbar-links a').forEach(link => {
         const href = link.getAttribute('href');
         const isActive = 
@@ -153,26 +157,54 @@ function createNewsCard(item, small = false) {
     const card = document.createElement('div');
     card.className = 'news-card' + (small ? ' news-card--small' : '');
     const icon = item.type === 'update' ? 'images/UPD.png' : 'images/NEWS.png';
-    card.innerHTML = `
-        <div class="news-card-image"><img src="${item.image}" alt="${item.title}"></div>
-        <div class="news-card-text">
-            <h3>${item.title}</h3>
-            <p class="news-card-desc">${item.description}</p>
-            <span class="news-card-date">${formatDate(item.date)}</span>
-        </div>
-        <div class="news-card-circle"><img src="${icon}" alt=""></div>
-    `;
+
+    const imgWrap = document.createElement('div');
+    imgWrap.className = 'news-card-image';
+    const img = document.createElement('img');
+    img.src = item.image;
+    img.alt = item.title;
+    imgWrap.appendChild(img);
+
+    const textWrap = document.createElement('div');
+    textWrap.className = 'news-card-text';
+    const h3 = document.createElement('h3');
+    h3.textContent = item.title;
+    const p = document.createElement('p');
+    p.className = 'news-card-desc';
+    p.textContent = item.description;
+    const span = document.createElement('span');
+    span.className = 'news-card-date';
+    span.textContent = formatDate(item.date);
+    textWrap.append(h3, p, span);
+
+    const circle = document.createElement('div');
+    circle.className = 'news-card-circle';
+    const iconImg = document.createElement('img');
+    iconImg.src = icon;
+    iconImg.alt = '';
+    circle.appendChild(iconImg);
+
+    card.append(imgWrap, textWrap, circle);
     card.addEventListener('click', () => openNewsPopup(item));
     return card;
 }
 
 function createNewsListItem(item) {
     const li = document.createElement('li');
-    li.innerHTML = `<a href="#">${item.title}<span class="news-list-date">${formatDate(item.date)}</span></a>`;
-    li.querySelector('a').addEventListener('click', e => {
+    const a = document.createElement('a');
+    a.href = '#';
+    a.textContent = item.title;
+
+    const span = document.createElement('span');
+    span.className = 'news-list-date';
+    span.textContent = formatDate(item.date);
+    a.appendChild(span);
+
+    a.addEventListener('click', e => {
         e.preventDefault();
         openNewsPopup(item);
     });
+    li.appendChild(a);
     return li;
 }
 
@@ -180,6 +212,7 @@ function renderNewsColumn(items, cardContainerId, listId, showMoreId) {
     const cardContainer = document.getElementById(cardContainerId);
     const list = document.getElementById(listId);
     const showMore = document.getElementById(showMoreId);
+    if (!cardContainer || !list || !showMore) return; // abort if structure missing
 
     if (items.length > 0) cardContainer.appendChild(createNewsCard(items[0], true));
 
@@ -230,7 +263,7 @@ async function initCredits() {
     const creditsData = await fetch('datas/credits.json').then(r => r.json());
     const { categories, guests, team } = creditsData;
 
-    // Create a map to fetch member data easily securely using their ID
+    // create a lookup map from member id to data
     const teamMap = new Map((team || []).map(member => [member.id, member]));
 
     if (container) {
@@ -442,14 +475,11 @@ async function initWikiPage() {
 }
 
 (async () => {
-    await loadNavbar();
-    await loadFooter();
-    await loadLoader();
+    // load static fragments in parallel
+    await Promise.all([loadNavbar(), loadFooter(), loadLoader()]);
     initLoader();
+
+    // initialize interactive components; they themselves fetch data
     initNewsPopup();
-    initNews();
-    initFaq();
-    initCredits();
-    initWiki();
-    initWikiPage();
+    await Promise.all([initNews(), initFaq(), initCredits(), initWiki(), initWikiPage()]);
 })();

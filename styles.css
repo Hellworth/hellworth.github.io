@@ -465,7 +465,7 @@ h2 {
     text-align: left;
 }
 
-/* ====== NEWS ====== */
+/* ====== NEWS COLUMNS & LIST ====== */
 
 /* Two-column layout */
 .news-columns {
@@ -552,7 +552,7 @@ h2 {
 }
 
 .news-show-more {
-    display: block;
+    display: none; /* will be shown by JS when needed */
     text-align: center;
     padding: 12px clamp(16px, 2vw, 36px);
     color: #000;
