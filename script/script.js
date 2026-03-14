@@ -105,25 +105,19 @@ function formatDate(iso) {
     return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+function renderNewsPopupContent(item) {
+    const contentEl = document.querySelector('.news-popup-content');
+    if (!contentEl) return;
+
+    contentEl.innerHTML = item.content || '';
+}
+
 /* ====== NEWS POPUP ====== */
 function initNewsPopup() {
-    const overlay = document.createElement('div');
-    overlay.className = 'news-popup-overlay';
-    overlay.innerHTML = `
-        <div class="news-popup">
-            <button class="news-popup-close">&times;</button>
-            <div class="news-popup-image"><img src="" alt=""></div>
-            <div class="news-popup-body">
-                <div class="news-popup-header">
-                    <div class="news-popup-icon"><img src="" alt=""></div>
-                    <h2 class="news-popup-title"></h2>
-                </div>
-                <p class="news-popup-date"></p>
-                <p class="news-popup-desc"></p>
-                <div class="news-popup-content"></div>
-            </div>
-        </div>
-    `;
+    const template = document.getElementById('news-popup-template');
+    if (!template) return;
+
+    const overlay = template.content.firstElementChild.cloneNode(true);
     document.body.appendChild(overlay);
 
     overlay.querySelector('.news-popup-close').addEventListener('click', closeNewsPopup);
@@ -141,9 +135,10 @@ function openNewsPopup(item) {
     overlay.querySelector('.news-popup-title').textContent = item.title;
     overlay.querySelector('.news-popup-date').textContent = formatDate(item.date);
     overlay.querySelector('.news-popup-desc').textContent = item.description;
-    overlay.querySelector('.news-popup-content').innerHTML = item.content || '';
+    renderNewsPopupContent(item);
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
 }
 
 function closeNewsPopup() {
@@ -151,60 +146,59 @@ function closeNewsPopup() {
     if (!overlay) return;
     overlay.classList.remove('active');
     document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
 }
 
 function createNewsCard(item, small = false) {
-    const card = document.createElement('div');
-    card.className = 'news-card' + (small ? ' news-card--small' : '');
+    const template = document.getElementById('news-card-template');
+    if (!template) return document.createElement('div');
+
+    const card = template.content.firstElementChild.cloneNode(true);
+    if (small) card.classList.add('news-card--small');
+
     const icon = item.type === 'update' ? 'images/UPD.png' : 'images/NEWS.png';
 
-    const imgWrap = document.createElement('div');
-    imgWrap.className = 'news-card-image';
-    const img = document.createElement('img');
-    img.src = item.image;
-    img.alt = item.title;
-    imgWrap.appendChild(img);
+    const img = card.querySelector('.news-card-image img');
+    const title = card.querySelector('.news-card-title');
+    const desc = card.querySelector('.news-card-desc');
+    const date = card.querySelector('.news-card-date');
+    const circleImg = card.querySelector('.news-card-circle img');
 
-    const textWrap = document.createElement('div');
-    textWrap.className = 'news-card-text';
-    const h3 = document.createElement('h3');
-    h3.textContent = item.title;
-    const p = document.createElement('p');
-    p.className = 'news-card-desc';
-    p.textContent = item.description;
-    const span = document.createElement('span');
-    span.className = 'news-card-date';
-    span.textContent = formatDate(item.date);
-    textWrap.append(h3, p, span);
+    if (img) {
+        img.src = item.image;
+        img.alt = item.title;
+    }
+    if (title) title.textContent = item.title;
+    if (desc) desc.textContent = item.description;
+    if (date) date.textContent = formatDate(item.date);
+    if (circleImg) {
+        circleImg.src = icon;
+        circleImg.alt = '';
+    }
 
-    const circle = document.createElement('div');
-    circle.className = 'news-card-circle';
-    const iconImg = document.createElement('img');
-    iconImg.src = icon;
-    iconImg.alt = '';
-    circle.appendChild(iconImg);
-
-    card.append(imgWrap, textWrap, circle);
     card.addEventListener('click', () => openNewsPopup(item));
     return card;
 }
 
 function createNewsListItem(item) {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = '#';
-    a.textContent = item.title;
+    const template = document.getElementById('news-list-item-template');
+    if (!template) return document.createElement('li');
 
-    const span = document.createElement('span');
-    span.className = 'news-list-date';
-    span.textContent = formatDate(item.date);
-    a.appendChild(span);
+    const li = template.content.firstElementChild.cloneNode(true);
+    const title = li.querySelector('.news-list-title');
+    const date = li.querySelector('.news-list-date');
+    const link = li.querySelector('a');
 
-    a.addEventListener('click', e => {
-        e.preventDefault();
-        openNewsPopup(item);
-    });
-    li.appendChild(a);
+    if (title) title.textContent = item.title;
+    if (date) date.textContent = formatDate(item.date);
+
+    if (link) {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            openNewsPopup(item);
+        });
+    }
+
     return li;
 }
 
@@ -241,16 +235,15 @@ async function initNews() {
 
 async function initFaq() {
     const list = document.getElementById('faq-list');
-    if (!list) return;
+    const template = document.getElementById('faq-item-template');
+    if (!list || !template) return;
+
     const items = await fetch('datas/faq.json').then(r => r.json());
 
     items.forEach(({ question, answer }) => {
-        const details = document.createElement('details');
-        details.className = 'faq-item';
-        details.innerHTML = `
-            <summary class="faq-question">${question}</summary>
-            <p class="faq-answer">${answer}</p>
-        `;
+        const details = template.content.firstElementChild.cloneNode(true);
+        details.querySelector('.faq-question').textContent = question;
+        details.querySelector('.faq-answer').textContent = answer;
         list.appendChild(details);
     });
 }
@@ -474,6 +467,32 @@ async function initWikiPage() {
     `;
 }
 
+function initBackToTop() {
+    const id = 'back-to-top';
+    let btn = document.getElementById(id);
+    if (!btn) {
+        btn = document.createElement('img');
+        btn.id = id;
+        btn.src = 'images/UP.png';
+        btn.alt = 'Back to top';
+        btn.setAttribute('role', 'button');
+        btn.setAttribute('tabindex', '0');
+        document.body.appendChild(btn);
+    }
+
+    const showThreshold = 120;
+
+    const updateVisibility = () => {
+        if (window.scrollY > showThreshold) btn.classList.add('show');
+        else btn.classList.remove('show');
+    };
+
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    updateVisibility();
+}
+
 (async () => {
     // load static fragments in parallel
     await Promise.all([loadNavbar(), loadFooter(), loadLoader()]);
@@ -482,4 +501,5 @@ async function initWikiPage() {
     // initialize interactive components; they themselves fetch data
     initNewsPopup();
     await Promise.all([initNews(), initFaq(), initCredits(), initWiki(), initWikiPage()]);
+    initBackToTop();
 })();

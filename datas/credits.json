@@ -1,8 +1,8 @@
 {
     "team": [
         {
-            "id": "alexgbourdon",
-            "name": "Alex G. Bourdon",
+            "id": "alexcbourbon",
+            "name": "Alex C. Bourbon",
             "image": "images/image_users/credit_alex.png"
         },
         {
@@ -90,7 +90,7 @@
             "title": "Founder",
             "members": [
                 {
-                    "id": "alexgbourdon",
+                    "id": "alexcbourbon",
                     "roles": [
                         "Gameplay Designer",
                         "Story / Side Quest Designer",

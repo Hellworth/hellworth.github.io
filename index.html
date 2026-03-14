@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dranima</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="icon" href="images/favicon.png" type="image/png">
     <script src="script/script.js" defer></script>
 </head>
@@ -29,7 +30,7 @@
     </section>
 
     <!-- ====== NEWS ====== -->
-    <section class="section-news bg-pattern spike-top spike-bottom" id="news">
+    <section class="section-news bg-pattern spiked" id="news">
         <h2>Major Announcements</h2>
         <div id="major-news-container"></div>
 
@@ -122,10 +123,64 @@
     </section>
 
     <!-- ====== FAQ ====== -->
-    <section class="section-faq" id="faq">
+    <section class="section-faq bg-pattern spiked" id="faq">
         <h2>FAQ</h2>
         <div class="faq-list" id="faq-list"></div>
         <p class="faq-signature creator-signature">— Alex Bourbon, creator of Dranima</p>
+    </section>
+
+    <!-- Templates -->
+    <template id="faq-item-template">
+        <details class="faq-item">
+            <summary class="faq-question"></summary>
+            <p class="faq-answer"></p>
+        </details>
+    </template>
+
+    <template id="news-popup-template">
+        <div class="news-popup-overlay">
+            <div class="news-popup">
+                <button class="news-popup-close"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="sr-only">Close</span></button>
+                <div class="news-popup-image"><img src="" alt=""></div>
+                <div class="news-popup-body">
+                    <div class="news-popup-header">
+                        <div class="news-popup-icon"><img src="" alt=""></div>
+                        <h2 class="news-popup-title"></h2>
+                    </div>
+                    <p class="news-popup-date"></p>
+                    <p class="news-popup-desc"></p>
+                    <div class="news-popup-content"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="news-card-template">
+        <div class="news-card">
+            <div class="news-card-image"><img src="" alt=""></div>
+            <div class="news-card-text">
+                <h3 class="news-card-title"></h3>
+                <span class="news-card-date"></span>
+                <p class="news-card-desc"></p>
+            </div>
+            <div class="news-card-circle"><img src="" alt=""></div>
+        </div>
+    </template>
+
+    <template id="news-list-item-template">
+        <li>
+            <a href="#">
+                <span class="news-list-title"></span>
+                <span class="news-list-date"></span>
+            </a>
+        </li>
+    </template>
+
+    <!-- ====== CONTACT INVITE ====== -->
+    <section class="section-wiki-invite info-section" id="wiki-invite">
+        <h2>Want to collaborate or stream Dranima?</h2>
+        <p>If you’re a streamer, creator, or just want to get in touch, send us an email and we’ll get back to you.</p>
+        <a href="mailto:booksofdranima@gmail.com" class="btn">Email Us</a>
     </section>
 
     <!-- ====== FOOTER ====== -->

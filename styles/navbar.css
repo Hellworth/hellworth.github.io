@@ -1,0 +1,41 @@
+/* ====== NAVBAR ====== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: transparent;
+    padding: clamp(20px, 2vw, 50px) 0 0 clamp(20px, 2vw, 50px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    z-index: 100;
+    font-family: 'NerkoOne', cursive;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    width: clamp(180px, 22vw, 400px);
+}
+
+.navbar-logo img {
+    width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(5px 5px 0 #0006);
+}
+
+.navbar-links {
+    display: flex;
+    gap: clamp(10px, 2vw, 24px);
+    align-items: center;
+    padding: clamp(8px, 2vw, 16px) clamp(14px, 2vw, 30px);
+    background-color: #703200;
+    border-radius: var(--radius-pill) 0 0 var(--radius-pill);
+    outline: solid 3px #000;
+    max-height: fit-content;
+    box-shadow: var(--shadow), var(--inset-shadow);
+    flex-wrap: wrap;
+}
