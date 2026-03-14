@@ -219,7 +219,19 @@ h2 {
     cursor: pointer;
     transform: translateY(120%);
     opacity: 0;
+    z-index: 999;
+    transition: transform 0.3s, opacity 0.3s;
 }
+#back-to-top.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+#back-to-top:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+}
+
 
 /* Shared helper for inserting images in text content sections */
 .content-img {
@@ -238,14 +250,4 @@ h2 {
     width: 100%;
     height: auto;
     object-fit: cover;
-}
-
-#back-to-top.show {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-#back-to-top:focus-visible {
-    outline: 3px solid #fff;
-    outline-offset: 2px;
 }
