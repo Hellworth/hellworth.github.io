@@ -110,9 +110,32 @@ function renderNewsColumn(items, cardContainerId, listId, showMoreId) {
     column.style.display = '';
     cardContainer.appendChild(createNewsCard(items[0], true));
 
-    items.slice(1, 1 + NEWS_LIST_MAX).forEach(item => list.appendChild(createNewsListItem(item)));
+    const listItems = items.slice(1).map(item => createNewsListItem(item));
+    listItems.forEach((li, idx) => {
+        if (idx >= NEWS_LIST_MAX) {
+            li.style.display = 'none';
+        }
+        list.appendChild(li);
+    });
 
-    if (items.length > 1 + NEWS_LIST_MAX) showMore.style.display = 'block';
+    const toggleShowMore = () => {
+        const expanded = showMore.classList.toggle('expanded');
+        showMore.textContent = expanded ? 'Show Less' : 'Show More';
+        listItems.forEach((li, idx) => {
+            if (idx >= NEWS_LIST_MAX) {
+                li.style.display = expanded ? '' : 'none';
+            }
+        });
+    };
+
+    showMore.addEventListener('click', e => {
+        e.preventDefault();
+        toggleShowMore();
+    });
+
+    if (items.length > 1 + NEWS_LIST_MAX) {
+        showMore.style.display = 'block';
+    }
 }
 
 async function initNews() {

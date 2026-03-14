@@ -196,12 +196,12 @@
     text-decoration: none;
     font-weight: bold;
     border-top: 2px solid #0002;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.2s;
 }
 
 .news-show-more:hover {
     background-color: var(--bright-orange);
-    color: #fff;
+    color: #000;
 }
 
 /* ====== NEWS POPUP ====== */
