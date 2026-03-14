@@ -1,6 +1,6 @@
 /* ====== HERO ====== */
 .hero {
-    min-height: clamp(500px, 70vh, 850px);
+    min-height: clamp(750px, 70vh, 850px);
     width: 100%;
     max-width: var(--content-max);
     margin: 0 auto;
