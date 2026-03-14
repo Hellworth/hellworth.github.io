@@ -208,6 +208,17 @@ function renderNewsColumn(items, cardContainerId, listId, showMoreId) {
     const showMore = document.getElementById(showMoreId);
     if (!cardContainer || !list || !showMore) return; // abort if structure missing
 
+    const column = cardContainer.closest('.news-column');
+    if (!column) return;
+
+    // Hide the whole column when there are no items to show
+    if (!items || items.length === 0) {
+        column.style.display = 'none';
+        return;
+    }
+
+    column.style.display = '';
+
     if (items.length > 0) cardContainer.appendChild(createNewsCard(items[0], true));
 
     items.slice(1, 1 + NEWS_LIST_MAX).forEach(item => list.appendChild(createNewsListItem(item)));
