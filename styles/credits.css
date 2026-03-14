@@ -1,36 +1,4 @@
 /* ====== CREDITS ====== */
-.credits-title-box {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    width: 300px;
-    height: 300px;
-    filter: drop-shadow(var(--shadow));
-}
-
-.credits-star {
-    position: absolute;
-    width: 300px;
-    height: auto;
-    animation: star-spin 30s linear infinite;
-}
-
-@keyframes star-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.credits-title-box h1 {
-    position: relative;
-    z-index: 1;
-    color: #fff;
-    -webkit-text-stroke: 5px #000;
-    paint-order: stroke fill;
-    margin: 0;
-    font-size: clamp(56px, 8vw, 104px);
-}
 
 .section-guest-artists {
     padding-block: 60px;

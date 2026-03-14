@@ -1,6 +1,6 @@
 /* ====== HERO ====== */
 .hero {
-    height: 850px;
+    min-height: 850px;
     width: 100%;
     max-width: var(--content-max);
     margin: 0 auto;
@@ -58,4 +58,30 @@
     border-top: 3px solid #ffffff;
     margin: 15px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 720px) {
+    .hero {
+        min-height: 500px;
+    }
+
+    .hero-info {        
+        left: 50%;
+        transform: translate(-50%, -50%);      
+        top: 60%;  
+        width: 100%;
+        padding-inline-start: 0;
+    }
+
+    .hero-label {
+        font-size: 0.75rem;
+    }
+
+    .hero-value {
+        font-size: 1.75rem;
+    }
+
+    .hero-divider {
+        max-width: 200px;
+    }
 }

@@ -251,3 +251,40 @@ h2 {
     height: auto;
     object-fit: cover;
 }
+
+.title-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    width: clamp(200px, 55vw, 260px);
+    height: clamp(200px, 55vw, 260px);
+    transform: translateY(10%);
+    filter: drop-shadow(var(--shadow));
+}
+
+.title-box h1 {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    -webkit-text-stroke: 5px #000;
+    paint-order: stroke fill;
+    margin: 0;
+    font-size: clamp(75px, 8vw, 104px);
+}
+
+.title-star {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 90%;
+    height: 90%;
+    animation: star-spin 30s linear infinite;
+}
+
+@keyframes star-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
