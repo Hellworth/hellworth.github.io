@@ -36,6 +36,7 @@
 .wiki-group-multi {
     display: grid;
     gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
 .wiki-group-multi .wiki-category-header {
@@ -84,7 +85,7 @@
 
 .wiki-group-single .wiki-entries-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 4px 16px;
     padding: 10px 16px;
 }
@@ -211,6 +212,8 @@
 
 .wiki-page-image {
     width: 280px;
+    max-width: 100%;
+    height: auto;
     border-radius: var(--radius);
     border: 3px solid var(--bright-orange);
     box-shadow: var(--shadow);
