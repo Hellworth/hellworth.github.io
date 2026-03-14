@@ -1,6 +1,6 @@
 /* ====== HERO ====== */
 .hero {
-    min-height: 850px;
+    min-height: clamp(500px, 70vh, 850px);
     width: 100%;
     max-width: var(--content-max);
     margin: 0 auto;
@@ -38,7 +38,7 @@
 }
 
 .hero-label {
-    font-size: 1rem;
+    font-size: clamp(0.75rem, 2.2vw, 1.1rem);
     letter-spacing: 0.25em;
     opacity: 0.75;
     text-shadow: var(--shadow);
@@ -46,7 +46,7 @@
 
 .hero-value {
     font-family: 'NerkoOne', cursive;
-    font-size: 2rem;
+    font-size: clamp(1.75rem, 5vw, 2.4rem);
     margin-bottom: 8px;
     text-shadow: var(--shadow);
 }
@@ -108,13 +108,7 @@
         padding-inline-start: 0;
     }
 
-    .hero-label {
-        font-size: 0.75rem;
-    }
-
-    .hero-value {
-        font-size: 1.75rem;
-    }
+    /* Font sizes are handled with clamp() for better scaling */
 
     .hero-divider {
         max-width: 200px;
