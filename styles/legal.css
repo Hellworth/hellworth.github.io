@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 160px var(--section-side-padding) 80px;
+    padding: 200px var(--section-side-padding) 80px;
     text-align: center;
 }
 
