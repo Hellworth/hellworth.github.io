@@ -9,6 +9,7 @@
 @import url("project.css");
 @import url("wiki.css");
 @import url("index.css");
+@import url("legal.css");
 
 @font-face {
     font-family: 'NerkoOne';
@@ -161,6 +162,7 @@ h2 {
     margin: 20px auto;
     font-size: clamp(18px, 2vw, 28px);
 }
+
 
 .spiked {
     -webkit-mask-image: url('../images/spike.svg'), url('../images/spike-bottom.svg'), linear-gradient(black, black);
