@@ -97,33 +97,36 @@ async function loadFooter() {
 }
 
 function initLoader() {
-    const start = Date.now();
+    const loader = document.getElementById('loader');
+    if (!loader) return;
 
     const dismiss = () => {
         const el = document.getElementById('loader');
         if (!el) return;
+        // If the loader was never shown, just remove it immediately to avoid a flash
+        if (!el.classList.contains('loader-visible')) {
+            el.remove();
+            return;
+        }
+
         el.classList.add('loader-exit');
         setTimeout(() => el.remove(), 1800);
     };
 
-    const onLoaded = () => {
+    const showLoader = () => {
         const el = document.getElementById('loader');
         if (!el) return;
-        if (Date.now() - start < LOADER_THRESHOLD) {
-            el.remove();
-        } else {
-            dismiss();
-        }
+        el.classList.add('loader-visible');
     };
 
     if (document.readyState === 'complete') {
-        onLoaded();
+        dismiss();
     } else {
-        window.addEventListener('load', onLoaded, { once: true });
+        window.addEventListener('load', dismiss, { once: true });
         setTimeout(() => {
             const el = document.getElementById('loader');
             if (el && document.readyState !== 'complete') {
-                el.classList.add('loader-visible');
+                showLoader();
             }
         }, LOADER_THRESHOLD);
     }

@@ -11,7 +11,12 @@
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
+
+    /* background pattern + spikes */
+    background-image: url('../images/pattern.png');
+    background-size: 300px 400px;
 }
+
 
 #loader.loader-visible {
     opacity: 1;
@@ -35,13 +40,13 @@
     filter: drop-shadow(0 10px 0 #0006);
 }
 
-#loader.loader-exit .loader-bg {
-    animation: loader-bg-leave 1.6s ease-in-out forwards;
+#loader.loader-exit {
+    animation: loader-fade-out 0.9s ease forwards;
 }
 
-@keyframes loader-bg-leave {
-    from { transform: translateY(-75%); }
-    to { transform: translateY(calc(-100% - 51vh)); }
+@keyframes loader-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 #loader .loader-content {
@@ -94,6 +99,7 @@
 }
 
 .loader-text {
+    font-family: 'NerkoOne', cursive;
     font-size: 3rem;
     color: #000;
     text-shadow: var(--shadow);
